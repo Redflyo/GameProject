@@ -1,6 +1,6 @@
 require('content')
 require('tools')
-
+require('collision')
 
 -- Dev Ulysse.B
 -- For animation idea of firstnumber = action & secondnumber = orientation
@@ -12,7 +12,11 @@ player = {}
 player.img = {}
 player.indexCurrentImage = 1
  --- Some variable for animation is need
+player.rsizex = 96 -- R for reference
+player.rsizey = 192
 
+player.sizex = 0 -- true size
+player.sizey = 0
 
 player.speed = 360 -- pixel per second
 player.acceleration = 250
@@ -30,7 +34,14 @@ player.friction = 0.1
 player.vision = {}
 player.vision.sens = 0 -- 0 bas , 1 gauche , 2 haut , 3 droite
 
+-- for debug collision bug
+function getPointCollision( ratio )
+	local obj = {}
+	obj.x = player.position.x + (player.sizex)/2
+	obj.y = player.position.y + (player.sizey)
+	return obj
 
+end
 
 -- Define Friction and get it
 function getFriction( )
@@ -40,11 +51,16 @@ function setFriction( coeffientFriction )
 	player.friction = coeffientFriction
 end
 
-function LoadPlayer(  )
+function LoadPlayer( ratio )
 	player.img = loadImagePlayer()
 
 	player.indexCurrentImage = 1
+	ratioSizePlayer(ratio)
+end
 
+function ratioSizePlayer( ratio )
+	player.sizex = player.rsizex * ratio.x
+	player.sizey = player.rsizey * ratio.y
 end
 
 --get player
@@ -117,20 +133,28 @@ function controlPlayerMovement(deltaTime,ratio)
 end
 
 
--- Change player.position with player.velocity (and deltatime is include)
+-- Change player.position with player.velocity (and deltatime is include) / Verif if there is not collision
 function movePlayer(deltaTime)
-	-- Translation x,y
-	if(canWalk(player.position.x,player.position.y)) then
-		player.position.x = player.position.x + player.velocity.x * deltaTime
-		player.position.y = player.position.y + player.velocity.y * deltaTime 
+	-- Translation x,y in the future
+	local futurPositionX =	player.position.x + player.velocity.x * deltaTime
+	local futurPositionY =	player.position.y + player.velocity.y * deltaTime 
+
+	local r = {} -- create a fake ratio
+	r.x = 1
+	r.y = 1
+
+	local obj = CreateObjectCollision(futurPositionX,futurPositionY,player.sizex,player.sizey,r)
+	
+	if(collisionWithObject(obj) == false ) then 		-- Test if collision and if it's don't move the player
+		
+		player.position.x = futurPositionX
+		player.position.y = futurPositionY
+	--	print("X:".. tostring(player.position.x) .. "/ Y: " .. tostring(player.position.y) )
 	end
 
 end
 
-function canWalk( x,y )
-	--collision test
-	return true
-end
+
 
 -- slowdownPlayer
 function slowDownPlayer(  )

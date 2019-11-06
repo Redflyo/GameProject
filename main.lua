@@ -3,12 +3,14 @@ require('tools')
 require('map')
 require('camera')
 require('player')
+require('collision')
 -- The main class for the game Ulysse.B
 
 playerControl = true
 local todraw = {}
 local option = false
 
+TMap = {}
 ratio = 1
 screenRefx = 1920
 screenRefy = 1080
@@ -18,6 +20,8 @@ function love.load()
 --success = love.window.setFullscreen( true )
 
 love.window.setMode(1366,768)
+
+
 
 
  print("Game Start")
@@ -30,7 +34,7 @@ love.window.setMode(1366,768)
   print("Maps are load")
 
 
-  print ("Load Camera")
+  print ("Loading Camera")
   CreateScreen(love.graphics.getWidth(),love.graphics.getHeight())
  
 
@@ -38,15 +42,20 @@ love.window.setMode(1366,768)
   ratio = getRatio( screenRefx,screenRefy )
 
 
-  print ("Load Objects of the map")
+  print ("Loading Objects of the map")
   TMap = getCurrentMap()
 
 
-  print("Load Map like in object")
+  print("Loading Map like in object")
   loadMapInObject(TMap,ratio)
 
-  print("Load Player")
-  LoadPlayer()
+  print("Loading Player")
+  LoadPlayer(ratio)
+
+  print("Loading Collision System")
+  
+
+  LoadCollisionSystem(TMap[2],ratio) -- Collision is the number 2
 
 end
 
@@ -60,7 +69,11 @@ function love.draw()
 
 
 	if (option == false) then
-		love.graphics.print(tostring(#todraw).. "  " .. love.timer.getFPS(),0,0)
+		--Load Point of collision
+		local obj = getPointCollision(ratio)
+
+
+		love.graphics.print(tostring(#todraw).. "  " .. love.timer.getFPS() .. "   Collision point: X/Y : " .. tostring(obj.x) .. ";" .. tostring(obj.y)  ,0,0)
 	end
 
 end

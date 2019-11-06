@@ -35,7 +35,7 @@ function focusObject( obj)
 	local difx = (obj.x + cam.x) - cam.screenX / 2
 	local dify = (obj.y + cam.y) - cam.screenY / 2
 
-	print(tostring(obj.y + cam.y) .. " / " .. tostring(cam.screenX / 2))
+	--print(tostring(obj.y + cam.y) .. " / " .. tostring(cam.screenX / 2))
 
 	if(difx < 0)then
 		if(difx < -borderX) then
@@ -84,7 +84,9 @@ end
 
 
 function loadMapInObject( currentmap ,ratio)
-	for ind=1,#currentmap do
+	
+-- 1 is map with texture ; but 2 is collision
+	for ind=1,1 do
 		for y=1,#currentmap[ind] do
 			for x = 1, #currentmap[ind][y] do
 

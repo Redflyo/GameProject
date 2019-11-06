@@ -7,7 +7,7 @@
 maps = {}
 currentMap = {}
 
-local numTypeFile = 1
+local numTypeFile = 2
 local NameOfCurrentMap = ""
 local PatchMapInfo = "map.info"
 local mapDir = "map"
@@ -20,10 +20,12 @@ function LoadAllMap()
 	
 	print("Start to load..")
 	if(love.filesystem.exists(mapDir)) then
+		
 	else
+	
 		love.filesystem.createDirectory(mapDir)
 	end
-
+print(mapDir)
 	cpt  = 1
 	for line in love.filesystem.lines(PatchMapInfo) do
  		maps[cpt] = getMap(line)

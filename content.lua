@@ -12,6 +12,14 @@ function loadContent(  )
 return ok
 end
 
+function getPatchCollision( MapName )
+	-- body
+end
+
+function getCollision( MapName )
+	
+end
+
 
 
 function getImage( id )

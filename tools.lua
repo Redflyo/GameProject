@@ -10,6 +10,14 @@ function inverseBool( bool )
 	end
 end
 
+function split(s, delimiter)
+    result = {};
+    for match in (s..delimiter):gmatch("(.-)"..delimiter) do
+        table.insert(result, match);
+    end
+    return result;
+end
+
 -- Input is Table of boolean  and return number of variable on true
 function getNumOfTrue( b )
 	local cpt = 0
@@ -22,7 +30,7 @@ function getNumOfTrue( b )
 end
 
 -- convert position pixel to case
-function getPosition( obj , sizex , sizey )
+function getCooCase( obj , sizex , sizey )
 	local obj = {}
 	obj.x = obj.x / sizex
 	obj.y = obj.y / sizey
